@@ -6,7 +6,8 @@ interface GameContextType {
     currentRowIndex: number;
     score: number;
     gameOver: boolean;
-    handleGuessMade: (rowId: number) => void;
+    guessedCircle: number | null;
+    handleGuessMade: (rowId: number,guessedCircle: number) => void;
     resetGame: () => void;
 }
 
@@ -25,46 +26,39 @@ interface GameProviderProps {
 }
 
 export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
-    const [rows, setRows] = useState(Array.from({ length: 10 }, (_, index) => ({ id: index, isDone: false, correctCircle: _selectCorrectCircle() })));
+    const [rows, setRows] = useState(Array.from({ length: 100 }, (_, index) => ({ id: index, isDone: false, correctCircle: _selectCorrectCircle() })));
     const [currentRowIndex, setCurrentRowIndex] = useState(0);
     const [score, setScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
-
+    const [guessedCircle, setGuessedCircle] = useState<number | null>(null);
     function _selectCorrectCircle() {
         const randomNumber = random.int(0, 2);
         return randomNumber;
     }
 
-    const addNewRow = () => {
-        setRows(prevRows => {
-            const lastRow = prevRows[prevRows.length - 1];
-            if (lastRow.isDone) {
-                console.log('New row has been added!');
-                return [{ id: prevRows.length, isDone: false, correctCircle: _selectCorrectCircle() }, ...prevRows];
-            }
-            return prevRows;
-        });
-    };
-
-    const handleGuessMade = (rowId: number) => {
+    const handleGuessMade = (rowId: number,guessedCircle: number) => {
         setRows(prevRows => {
             return prevRows.map(row =>
                 row.id === rowId ? { ...row, isDone: true } : row
             );
         });
-        setScore(prevScore => prevScore + 1);
-        addNewRow();
+
+        const correctCircle = rows.find(row => row.id === rowId)?.correctCircle;
+        if (correctCircle === guessedCircle) {
+            setScore(prevScore => prevScore + 1);
+        }
+        setCurrentRowIndex(prevIndex => prevIndex + 1);
     };
 
     const resetGame = () => {
-        setRows(Array.from({ length: 5 }, (_, index) => ({ id: index, isDone: false, correctCircle: _selectCorrectCircle() })));
+        setRows(Array.from({ length: 100 }, (_, index) => ({ id: index, isDone: false, correctCircle: _selectCorrectCircle() })));
         setCurrentRowIndex(0);
         setScore(0);
         setGameOver(false);
     };
 
     return (
-        <GameContext.Provider value={{ rows, currentRowIndex, score, gameOver, handleGuessMade, resetGame }}>
+        <GameContext.Provider value={{ rows, currentRowIndex, score, gameOver, guessedCircle, handleGuessMade, resetGame }}>
             {children}
         </GameContext.Provider>
     );

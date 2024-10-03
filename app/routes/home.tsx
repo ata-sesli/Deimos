@@ -1,4 +1,4 @@
-import {Row,Game} from './game'
+import {Game} from './game'
 import { useState } from 'react';
 
 function Profile() {
