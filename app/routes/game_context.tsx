@@ -25,7 +25,7 @@ interface GameProviderProps {
 }
 
 export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
-    const [rows, setRows] = useState(Array.from({ length: 5 }, (_, index) => ({ id: index, isDone: false, correctCircle: _selectCorrectCircle() })));
+    const [rows, setRows] = useState(Array.from({ length: 10 }, (_, index) => ({ id: index, isDone: false, correctCircle: _selectCorrectCircle() })));
     const [currentRowIndex, setCurrentRowIndex] = useState(0);
     const [score, setScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
