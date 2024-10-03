@@ -1,6 +1,6 @@
 import { SetStateAction, useEffect, useState } from "react";
 
-export function Circle({isCorrect = false, guessMade,setGuessMade}: {isCorrect: boolean,guessMade: boolean ,setGuessMade: React.Dispatch<React.SetStateAction<boolean>>}){
+export function Circle({isCorrect = false,guessMade,setGuessMade}: {isCorrect: boolean,guessMade: boolean, setGuessMade:React.Dispatch<React.SetStateAction<boolean>>}){
 
     const [bgColor,setBgColor] = useState('bg');
     const empty = " ";
