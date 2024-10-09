@@ -10,3 +10,77 @@ body {
     color-scheme: dark;
   }
 }
+/* Define keyframes for the animations */
+@keyframes noneToTop {
+  from { transform: scale(0); opacity: 0; top: 100%}
+  to { transform: scale(0.75); opacity: 0.5; top: 70%}
+}
+
+@keyframes topToUpper {
+  from { transform: scale(0.75); opacity: 0.5; top: 70%;}
+  to { transform: scale(1); opacity: 0.75; top: 60%}
+}
+
+@keyframes upperToMiddle{
+  from { transform: scale(1); opacity: 0.75; top: 60% }
+  to { transform: scale(1.5); opacity: 1; top: 50%}
+}
+
+@keyframes middleToLower {
+  from { transform: scale(1.5); opacity: 1; top: 50%}
+  to { transform: scale(1); opacity: 0.75; top: 40% }
+}
+
+@keyframes lowerToBottom {
+  from { transform: scale(1); opacity: 0.75; top: 40%}
+  to { transform: scale(0.75); opacity: 0.5; top: 30%}
+}
+
+@keyframes bottomToNone {
+  from { transform: scale(0.75); opacity: 0.5; top: 30%}
+  to { transform: scale(0); opacity: 0; top: 0% }
+}
+
+/* Define classes for each animation */
+.none-to-top {
+  animation: noneToTop 1.5s forwards;
+}
+
+.top-to-upper {
+  animation: topToUpper 1.5s forwards;
+}
+
+.upper-to-middle {
+  animation: upperToMiddle 1.5s forwards;
+}
+
+.middle-to-lower {
+  animation: middleToLower 1.5s forwards;
+}
+
+.lower-to-bottom {
+  animation: lowerToBottom 1.5s forwards;
+}
+
+.bottom-to-none {
+  animation: bottomToNone 1.5s forwards;
+}
+.top-row {
+  top: 30%;
+}
+
+.upper-row {
+  top: 40%;
+}
+
+.middle-row {
+  top: 50%;
+}
+
+.lower-row {
+  top: 60%;
+}
+
+.bottom-row {
+  top: 70%;
+}

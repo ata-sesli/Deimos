@@ -31,6 +31,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     const [score, setScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
     const [guessedCircle, setGuessedCircle] = useState<number | null>(null);
+    const [visibleRows, setVisibleRows] = useState([]);
     function _selectCorrectCircle() {
         const randomNumber = random.int(0, 2);
         return randomNumber;
@@ -44,10 +45,17 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
         });
 
         const correctCircle = rows.find(row => row.id === rowId)?.correctCircle;
+        setScore(prevScore => prevScore + 1);
+        setCurrentRowIndex(prevIndex => prevIndex + 1);
+        /*
         if (correctCircle === guessedCircle) {
             setScore(prevScore => prevScore + 1);
+            setCurrentRowIndex(prevIndex => prevIndex + 1);
         }
-        setCurrentRowIndex(prevIndex => prevIndex + 1);
+        else {
+            setGameOver(true);
+        } // 2000 milliseconds = 2 seconds delay
+        */
     };
 
     const resetGame = () => {

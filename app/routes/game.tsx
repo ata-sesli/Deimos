@@ -10,18 +10,44 @@ export function Game(){
     )
 }
 export function GameContent(){
-    // const [rows, setRows] = useState([{ id: 0,isDone: false,correctCircle: _selectCorrectCircle()}]);
-    // const [rows, setRows] = useState(Array.from({ length: 5 }, (_, index) => ({ id: index, isDone: false, correctCircle: _selectCorrectCircle() })));
     const { rows, currentRowIndex, score, gameOver, resetGame } = useGameContext();
+    const prevRowIndexRef = useRef<number | null>(null);
+    const [rowsToAnimateOut, setRowsToAnimateOut] = useState<number[]>([]);
+    useEffect(() => {
+        prevRowIndexRef.current = currentRowIndex;
+    }, [currentRowIndex]);
+
+    useEffect(() => {
+        if (prevRowIndexRef.current !== null && currentRowIndex > prevRowIndexRef.current) {
+          const rowToAnimateOut = currentRowIndex - 3;
+          if (rowToAnimateOut >= 0) {
+            setRowsToAnimateOut((prev) => [...prev, rowToAnimateOut]);
+          }
+        }
+      }, [currentRowIndex]);
+    
+      const handleAnimationEnd = (index: number) => {
+        setRowsToAnimateOut((prev) => prev.filter((rowIndex) => rowIndex !== index));
+      };
 
     const getRowClass = (index: number) => {
-        if (index === currentRowIndex) return 'transform scale-150'; // Biggest row
-        if (index === currentRowIndex - 1) return 'transform scale-100 pointer-events-none opacity-75'; // Middle row (previous)
-        if (index === currentRowIndex - 2) return 'transform scale-75 pointer-events-none opacity-50'; // Small row (previous)
-        if (index === currentRowIndex + 1) return 'transform scale-100 pointer-events-none opacity-75'; // Middle row (next)
-        if (index === currentRowIndex + 2) return 'transform scale-75 pointer-events-none opacity-50'; // Small row (next)
+        const baseClass = '';
+        const biggestRow = 'scale-150 opacity-100';
+        const smallerRow = 'scale-100 opacity-75 pointer-events-none';
+        const smallestRow = 'scale-75 opacity-50 pointer-events-none';
+
+        if (rowsToAnimateOut.includes(index)) {
+            return `${baseClass} ${smallestRow} bottom-to-none`;
+          }
+    
+        if (index === currentRowIndex) return `${baseClass} ${biggestRow} middle-row upper-to-middle`; // Current row (largest)
+        if (index === currentRowIndex - 1) return `${baseClass} ${smallerRow} lower-row middle-to-lower`; // Previous row (smaller)
+        if (index === currentRowIndex - 2) return `${baseClass} ${smallestRow} bottom-row lower-to-bottom`; // Two rows before (smallest)
+        if (index === currentRowIndex + 1) return `${baseClass} ${smallerRow} upper-row top-to-upper`; // Next row (smaller)
+        if (index === currentRowIndex + 2) return `${baseClass} ${smallestRow} top-row none-to-top`; // Two rows after (smallest)
         return 'hidden'; // Completely hidden
-    };
+      };
+
     if (gameOver) {
         return (
             <div className='flex flex-col justify-center items-center h-screen'>
@@ -33,19 +59,46 @@ export function GameContent(){
     }
     const startIndex = Math.max(0, currentRowIndex - 2);
     const endIndex = Math.min(rows.length, currentRowIndex + 3);
-
-    return (
+    
+    const gameContentFlex = (
         <div className='flex flex-col justify-center items-center h-screen'>
             <div className="text-2xl mb-4">Score: {score}</div>
-            <div className='flex flex-col justify-center items-center h-screen'>
-                <div className="flex flex-col-reverse space-y-16">
-                    {rows.slice(startIndex, endIndex).map((row, index) => (
-                        <div key={row.id} className={`transition-transform duration-300 ${getRowClass(startIndex + index)}`}>
-                            <Row rowId={row.id} />
-                        </div>
-                    ))}
-                </div>
+            <div className="flex flex-col-reverse space-y-16 items-center">
+                {rows.slice(startIndex, endIndex).map((row, index) => (
+                    <div key={row.id} className={`${getRowClass(startIndex + index)}`}>
+                        <Row rowId={row.id} />
+                    </div>
+                ))}
             </div>
         </div>
     );
+    const gameContentPositional = (
+        <div className='flex flex-col justify-center items-center h-screen'>
+            <div className="absolute top-0 w-screen text-2xl mb-4">Score: {score}</div>
+            <div className='absolute top-20 space-y-8'>
+                {rows.slice(startIndex, endIndex).map((row, index) => (
+                    <div
+                    key={row.id}
+                    className={`${getRowClass(startIndex + index)}`}
+                    onAnimationEnd={()=> handleAnimationEnd(startIndex + index)}
+                    >
+                    <Row rowId={row.id} />
+                    </div>
+                ))}
+            </div>
+        </div>
+      );
+    const gameContent = (
+        <div className='flex flex-col justify-center items-center h-screen'>
+            <div className="text-2xl mb-4">Score: {score}</div>
+            <div className="grid grid-cols-1 gap-4 items-center">
+                {rows.slice(startIndex, endIndex).map((row, index) => (
+                    <div key={row.id} className={`${getRowClass(startIndex + index)}`}>
+                        <Row rowId={row.id} />
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+    return gameContentPositional;
 }
