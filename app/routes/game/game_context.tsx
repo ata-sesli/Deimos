@@ -45,18 +45,21 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
         });
 
         const correctCircle = rows.find(row => row.id === rowId)?.correctCircle;
+        /*
         setScore(prevScore => prevScore + 1);
         setCurrentRowIndex(prevIndex => prevIndex + 1);
-        /*
-        if (correctCircle === guessedCircle) {
+        */
+        if (correctCircle !== guessedCircle) {
             setScore(prevScore => prevScore + 1);
             setCurrentRowIndex(prevIndex => prevIndex + 1);
         }
         else {
             setGameOver(true);
         } // 2000 milliseconds = 2 seconds delay
-        */
     };
+    const removeRow = (rowId: number) => {
+        setRows((prevRows) => prevRows.filter((row) => row.id !== rowId));
+      };
 
     const resetGame = () => {
         setRows(Array.from({ length: 100 }, (_, index) => ({ id: index, isDone: false, correctCircle: _selectCorrectCircle() })));
@@ -66,7 +69,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     };
 
     return (
-        <GameContext.Provider value={{ rows, currentRowIndex, score, gameOver, guessedCircle, handleGuessMade, resetGame }}>
+        <GameContext.Provider value={{ rows, currentRowIndex,score, gameOver, guessedCircle, handleGuessMade, resetGame }}>
             {children}
         </GameContext.Provider>
     );

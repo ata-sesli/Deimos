@@ -20,7 +20,7 @@ export const meta: MetaFunction = () => {
 // Define the main component
 export default function Index() {
   return (
-    <div>
+    <div className="overflow-hidden">
       <Home />
     </div>
   );

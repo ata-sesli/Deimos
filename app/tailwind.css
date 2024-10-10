@@ -84,3 +84,22 @@ body {
 .bottom-row {
   top: 70%;
 }
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 100ms;
+}
+
+/* Fade-out animation */
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active {
+  animation: bottomToNone 1.5s forwards;
+}
+.center-row {
+  left: 40%;
+  top: 15%;
+}
