@@ -20,9 +20,6 @@ export function GameContent(){
 
     useEffect(() => {
         prevRowIndexRef.current = currentRowIndex;
-      }, [currentRowIndex]);
-
-    useEffect(() => {
         const nextStartIndex = Math.max(0, currentRowIndex - 2);
         const nextEndIndex = Math.min(rows.length, currentRowIndex + 3);
     
