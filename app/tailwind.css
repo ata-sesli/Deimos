@@ -100,6 +100,7 @@ body {
   animation: bottomToNone 1.5s forwards;
 }
 .center-row {
+  position: absolute;
   left: 40%;
   top: 15%;
 }

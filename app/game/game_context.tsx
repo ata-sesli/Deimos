@@ -57,9 +57,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
             setGameOver(true);
         } // 2000 milliseconds = 2 seconds delay
     };
-    const removeRow = (rowId: number) => {
-        setRows((prevRows) => prevRows.filter((row) => row.id !== rowId));
-      };
 
     const resetGame = () => {
         setRows(Array.from({ length: 100 }, (_, index) => ({ id: index, isDone: false, correctCircle: _selectCorrectCircle() })));

@@ -16,7 +16,7 @@ export function Row({rowId} : {rowId: number}){
     if (!row) return null;
 
     return (
-    <div className="flex flex-row items-center space-x-16 pt-4">
+    <div className="flex flex-row justify-content items-center sm:space-x-6 lg:space-x-16 xs:space-x-4 ">
         <Circle isCorrect={row.correctCircle !== 0} circleIndex={0} guessMade={guessMade} setGuessMade={setGuessMade} rowId={rowId}/>
         <Circle isCorrect={row.correctCircle !== 1} circleIndex={1} guessMade={guessMade} setGuessMade={setGuessMade} rowId={rowId}/>
         <Circle isCorrect={row.correctCircle !== 2} circleIndex={2} guessMade={guessMade} setGuessMade={setGuessMade} rowId={rowId}/>
