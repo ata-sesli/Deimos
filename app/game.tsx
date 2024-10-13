@@ -52,7 +52,7 @@ export function GameContent(){
     const gameContent = (
         <div className='relative justify-content items-center overflow-hidden w-screen h-screen box-border sm:size-min'>
             <div className="relative left-1/2 top-[1%] transform -translate-x-1/2 min-w-fit min-h-fit text-2xl">Score: {score}</div>
-            <div className='relative flex xs:right-8 lg:right-0 rflex-col items-center justify-content w-screen h-screen top-20'>
+            <div className='relative flex xs:right-12 lg:right-0 flex-col items-center justify-content w-screen h-screen bottom-24'>
                     <TransitionGroup>
                     {visibleRows.map((row, index) => (
                       <CSSTransition
@@ -60,7 +60,7 @@ export function GameContent(){
                         timeout={1500}
                         classNames="fade"
                       >
-                        <div className={`${getRowClass(startIndex + index)} center-row lg:space-y-16 sm:space-y-4 xs:space-x-4`}>
+                        <div className={`${getRowClass(startIndex + index)} center-row xl:space-y-16 lg:space-y-12 md:space-y-8 sm:space-y-4 xs:space-x-4`}>
                           {row.id}
                           <Row rowId={row.id} />
                         </div>
