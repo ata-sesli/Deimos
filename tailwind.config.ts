@@ -7,6 +7,9 @@ export default {
       screens:{
         'xs' : '270px'
       },
+      colors: {
+        deimosBlue: '#0e347a]'
+      },
       fontFamily: {
         sans: [
           '"Inter"',

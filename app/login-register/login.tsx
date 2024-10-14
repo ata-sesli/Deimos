@@ -1,3 +1,3 @@
-export function loginPage(){
+export function loginWindow(){
 
 }

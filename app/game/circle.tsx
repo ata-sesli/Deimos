@@ -23,7 +23,7 @@ export function Circle({isCorrect = false,guessMade,setGuessMade,circleIndex,row
             className={`flex p-4 text-white-border border border-[#10598e] hover:bg-[#10598e] rounded-full lg:w-12 lg:h-12 lg:space-x-16 sm:w-6 sm:h-6 ${bgColor}`}
             onClick={handleClick}
             disabled={guessMade}
-        >
+        >  
             {empty}
         </button>
     );
