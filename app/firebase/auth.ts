@@ -1,6 +1,6 @@
 import { getAuth , createUserWithEmailAndPassword , signInWithEmailAndPassword} from "firebase/auth";
 import { getFirestore, doc, setDoc, collection, addDoc} from "firebase/firestore";
-
+import { Score } from "~/game/scoreboard";
 export async function login(email: string,password:string){
     const auth = getAuth();
     const response = await signInWithEmailAndPassword(auth,email,password);
@@ -29,9 +29,8 @@ export async function register(name: string, email: string, password: string){
         }
     }
     const firestore = getFirestore();
-    const userData = {
+    const userData: Score = {
         name: name,
-        email: email,
         highestScore: "0"
     }
     const db = collection(firestore,"users");

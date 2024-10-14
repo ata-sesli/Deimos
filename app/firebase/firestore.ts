@@ -1,11 +1,19 @@
 import { getAuth } from "firebase/auth";
 import { arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc} from "firebase/firestore";
+import { Score } from "~/game/scoreboard";
 
-export async function getScoreBoard(){
+export async function getScoreBoard(): Promise<Array<Score>>{
     const firestore = getFirestore();
     const db = collection(firestore,"users");
-    const scoresSnapshot = await getDocs(db);
-    const scoresList = scoresSnapshot.docs.map(doc => doc.data());
+    const usersSnapshot = await getDocs(db);
+    const usersList = usersSnapshot.docs.map(doc => doc.data());
+    const scoresList: Array<Score> = usersList.map((user): Score => {
+        return {
+            name: user["name"],
+            highestScore: user["highestScore"]
+        };
+    }).sort((a,b) => parseInt(b.highestScore) - parseInt(a.highestScore)).slice(0,99);
+    return scoresList;
 }
 export async function updateHighestScore(currentScore: string){
     const auth = getAuth();
