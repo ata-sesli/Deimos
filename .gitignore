@@ -1,6 +1,18 @@
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
-# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,macos,react,remix
-# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,macos,react,remix
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,remix,react,macos,dotenv,firebase
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,remix,react,macos,dotenv,firebase
+
+### dotenv ###
+.env
+
+### Firebase ###
+.idea
+**/node_modules/*
+**/.firebaserc
+
+### Firebase Patch ###
+.runtimeconfig.json
+.firebase/
 
 ### macOS ###
 # General
@@ -54,7 +66,6 @@ sketch
 /.cache
 /build
 /public/build
-.env
 
 ### VisualStudioCode ###
 .vscode/*
@@ -75,7 +86,9 @@ sketch
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,macos,react,remix
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,remix,react,macos,dotenv,firebase
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 
+.gitignore
+firebase.env

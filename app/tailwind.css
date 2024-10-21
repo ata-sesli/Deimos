@@ -4,11 +4,7 @@
 
 html,
 body {
-  @apply bg-white dark:bg-deimosBlue;
-
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+  background-color: var(--deimosBlue);
 }
 /* Define keyframes for the animations */
 @keyframes noneToTop {

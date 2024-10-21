@@ -3,6 +3,12 @@ import {SetStateAction, useEffect, useRef, useState} from 'react';
 import random from 'random';
 import {Row} from './game/row'
 import { GameProvider, useGameContext } from './game/game_context';
+import { Score, Scoreboard } from './game/scoreboard';
+import { getScoreBoard, getUserData } from './firebase/firestore';
+import { RegisterWindow } from './login-register/register';
+import { LoginWindow } from './login-register/login';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { DocumentData, getFirestore } from 'firebase/firestore';
 export function Game(){
     return (
         <GameProvider>
@@ -13,10 +19,29 @@ export function Game(){
 export function GameContent(){
     const { rows, currentRowIndex, score, gameOver, resetGame } = useGameContext();
     const prevRowIndexRef = useRef<number | null>(null);
-
+    const [isLoginWindowOpen, setIsLoginWindowOpen] = useState(false);
+    const [isRegisterWindowOpen, setIsRegisterWindowOpen] = useState(false);
+    const [isScoreboardOpen, setIsScoreboardOpen] = useState(false);
+    const [scoresList, setScoresList] = useState<Score[]>([]);
+    const [userData,setUserData] = useState<DocumentData | null | undefined>(null);
     const startIndex = Math.max(0, currentRowIndex - 2);
     const endIndex = Math.min(rows.length, currentRowIndex + 3);
     const [visibleRows, setVisibleRows] = useState(rows.slice(startIndex,endIndex));
+
+    useEffect(() => {
+        async function getUser(){
+            const userData = await getUserData();
+            setUserData(userData);
+        }
+        getUser();
+    },[gameOver]);
+    useEffect(() => {
+        async function fetchScores(){
+            const scores = await getScoreBoard();
+            setScoresList(scores);
+        }
+        fetchScores();
+    },[gameOver])
 
     useEffect(() => {
         prevRowIndexRef.current = currentRowIndex;
@@ -39,37 +64,65 @@ export function GameContent(){
         if (index === currentRowIndex + 2) return `${smallestRow} top-row none-to-top`;
         return 'hidden'; // Completely hidden
       };
-
-    if (gameOver) {
-        return (
-            <div className='flex flex-col justify-center items-center h-screen'>
-                <h1 className='text-4xl mb-4'>Game Over</h1>
-                <p className='text-2xl mb-4'>Your Score: {score}</p>
-                <button className='bg-blue-500 text-white p-4 rounded' onClick={resetGame}>Play Again</button>
-            </div>
-        );
-    }
     const gameContent = (
         <div className='relative justify-content items-center overflow-hidden w-screen h-screen box-border sm:size-min'>
-            <div className="relative left-1/2 top-[1%] transform -translate-x-1/2 min-w-fit min-h-fit text-2xl">Score: {score}</div>
-            <div className='relative flex xs:right-12 lg:right-0 flex-col items-center justify-content w-screen h-screen bottom-24'>
-                    <TransitionGroup>
-                    {visibleRows.map((row, index) => (
-                      <CSSTransition
-                        key={row.id}
-                        timeout={1500}
-                        classNames="fade"
-                      >
-                        <div className={`${getRowClass(startIndex + index)} center-row xl:space-y-16 lg:space-y-12 md:space-y-8 sm:space-y-4 xs:space-x-4`}>
-                          {row.id}
-                          <Row rowId={row.id} />
-                        </div>
-                      </CSSTransition>
-                    ))}
-                  </TransitionGroup>
-            </div>
-        </div>
-      );
+            {gameOver ? (
+                <div className='flex flex-col justify-center items-center h-screen'>
+                    <h1 className='text-8xl mb-16'>Game Over</h1>
+                    <p className='text-2xl mb-4'>Your score is {score}! Try again, you can do better!</p>
+                    <button className='bg-blue-500 text-white p-4 rounded mt-2' onClick={resetGame}>Play Again</button>
+                    
+                    {userData === null ? (
+                        <>
+                    <p className='text-2xl mb-4 mt-16'>If you want to save your score and see yourself in the scoreboard, create an account!</p>
+                    <div className='flex flex-row justify-center items-center space-x-8'>
+                        <button className='bg-blue-500 text-white p-4 rounded mt-2' onClick={() => setIsRegisterWindowOpen(true)}>Let's create!</button>
+                        <button className='bg-blue-500 text-white p-4 rounded mt-2' onClick={() => setIsLoginWindowOpen(true)}>I already have!</button>
+                    </div>
+                        </>
+                    ) : (
+                        <p className='text-2exl mb-4 mt-16'></p>
+                    )
 
+                }
+                </div>
+            ) : (
+                <>
+                    <div className="relative left-1/2 top-[1%] transform -translate-x-1/2 min-w-fit min-h-fit text-2xl">Score: {score}</div>
+                    <button className="absolute top-[1%] right-4 transform -translate-x-1/2 min-w-fit min-h-fit text-2xl z-50"
+                            onClick={() => setIsScoreboardOpen(true)}> Scoreboard </button>
+                    <div className='relative flex xs:right-12 lg:right-0 flex-col items-center justify-content w-screen h-screen bottom-24'>
+                        <TransitionGroup>
+                            {visibleRows.map((row, index) => (
+                                <CSSTransition
+                                    key={row.id}
+                                    timeout={1500}
+                                    classNames="fade"
+                                >
+                                    <div className={`${getRowClass(startIndex + index)} center-row xl:space-y-16 lg:space-y-12 md:space-y-8 sm:space-y-4 xs:space-x-4`}>
+                                        {row.id + 1}
+                                        <Row rowId={row.id} />
+                                    </div>
+                                </CSSTransition>
+                            ))}
+                        </TransitionGroup>
+                    </div>
+                </>
+            )}
+            <Scoreboard
+                  isOpen={isScoreboardOpen}
+                  onClose={() => setIsScoreboardOpen(false)}
+                  scoresList={scoresList}
+              />
+              <RegisterWindow
+                  isOpen={isRegisterWindowOpen}
+                  setIsOpen={setIsRegisterWindowOpen}
+              />
+              <LoginWindow
+                  isOpen={isLoginWindowOpen}
+                  setIsOpen={setIsLoginWindowOpen}
+              />
+          </div>
+      )
     return gameContent;
 }

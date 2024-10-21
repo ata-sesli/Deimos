@@ -1,6 +1,7 @@
 import { getAuth , createUserWithEmailAndPassword , signInWithEmailAndPassword} from "firebase/auth";
 import { getFirestore, doc, setDoc, collection, addDoc} from "firebase/firestore";
 import { Score } from "~/game/scoreboard";
+
 export async function login(email: string,password:string){
     const auth = getAuth();
     const response = await signInWithEmailAndPassword(auth,email,password);

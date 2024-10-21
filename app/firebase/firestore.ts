@@ -15,6 +15,21 @@ export async function getScoreBoard(): Promise<Array<Score>>{
     }).sort((a,b) => parseInt(b.highestScore) - parseInt(a.highestScore)).slice(0,99);
     return scoresList;
 }
+export async function getUserData(){
+    const auth = getAuth();
+    if (auth.currentUser !== null){
+        const userRef = auth.currentUser!.uid;
+        const firestore = getFirestore();
+        const db = collection(firestore,"users");
+        const userDocRef = doc(db,userRef);
+        const userDocRaw = await getDoc(userDocRef);
+        const userData = userDocRaw.data();
+        return userData;
+    }
+    else {
+        return null;
+    }
+}
 export async function updateHighestScore(currentScore: string){
     const auth = getAuth();
     const userRef = auth.currentUser!.uid;
