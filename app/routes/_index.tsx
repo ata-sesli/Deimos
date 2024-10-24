@@ -12,8 +12,8 @@ export const loader: LoaderFunction = async () => {
 // Define the meta function
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Deimos GDG" },
+    { name: "description", content: "Welcome to Deimos Game!" },
   ];
 };
 

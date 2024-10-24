@@ -16,24 +16,28 @@ export function Scoreboard({isOpen, onClose, scoresList} : ScoreboardProps){
             <div className="bg-white rounded-lg shadow-lg p-8 z-10 max-w-3xl w-full">
                 <h2 className="text-2xl font-bold mb-4">Scoreboard</h2>
                 <div className="overflow-auto max-h-96">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-customBlue">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-lg font-medium text-white tracking-wider">Rank</th>
-                                <th className="px-6 py-3 text-left text-lg font-medium text-white tracking-wider">Name</th>
-                                <th className="px-6 py-3 text-left text-lg font-medium text-white tracking-wider">Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {scoresList.map((row, index) => (
-                                <tr key={index}>
-                                    <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{row.name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{row.highestScore}</td>
+                    {scoresList && scoresList.length > 0 ? (
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-customBlue">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-lg font-medium text-white tracking-wider">Rank</th>
+                                    <th className="px-6 py-3 text-left text-lg font-medium text-white tracking-wider">Name</th>
+                                    <th className="px-6 py-3 text-left text-lg font-medium text-white tracking-wider">Score</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {scoresList.map((row, index) => (
+                                    <tr key={index}>
+                                        <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">{row.name}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">{row.highestScore}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : (
+                        <p className="text-center text-lg">Sign in or create an account to see the scoreboard after playing once.</p>
+                    )}
                 </div>
                 <button
                     className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -44,6 +48,6 @@ export function Scoreboard({isOpen, onClose, scoresList} : ScoreboardProps){
             </div>
         </div>
     );
-    console.log("Scoreboard is rendered!");
+    // console.log("Scoreboard is rendered!");
     return scoreboard;
 }

@@ -28,11 +28,12 @@ export function GameContent(){
     const endIndex = Math.min(rows.length, currentRowIndex + 3);
     const [visibleRows, setVisibleRows] = useState(rows.slice(startIndex,endIndex));
     const [user,setUser] = useState<User | null>();
+
     useEffect(() => {
         const auth = getAuth();
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setUser(user);
-            console.log(user);
+            // console.log(user);
         });
         return () => unsubscribe();
     }, []);
@@ -53,7 +54,7 @@ export function GameContent(){
             return scores!
         }
         fetchScores().then((result) => {
-            console.log(result);
+            // console.log(result);
             setScoresList(result);
             } 
     )},[user,gameOver])
@@ -81,7 +82,7 @@ export function GameContent(){
     const gameContent = (
         <div className='relative items-center overflow-hidden w-screen h-screen box-border sm:size-min'>
             {gameOver ? (
-                <div className='flex flex-col justify-center items-center h-screen'>
+                <div className='relative flex flex-col justify-center items-center h-screen p-8'>
                     <h1 className='text-8xl mb-16'>Game Over</h1>
                     <p className='text-2xl mb-4'>Your score is {score}! Try again, you can do better!</p>
                     <button className='bg-blue-500 text-white p-4 rounded mt-2' onClick={resetGame}>Play Again</button>

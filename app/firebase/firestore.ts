@@ -14,7 +14,7 @@ export async function getScoreBoard(): Promise<Array<Score> | null>{
                 highestScore: user["highestScore"]
             };
         }).sort((a,b) => parseInt(b.highestScore) - parseInt(a.highestScore)).slice(0,99);
-        console.log("Scoreboard is refreshed!");
+        // console.log("Scoreboard is refreshed!");
         return scoresList;
     }
     catch(e: unknown){
@@ -44,9 +44,9 @@ export async function updateHighestScore(currentScore: number,uid: string){
             await updateDoc(userDocRef,{highestScore: currentScore});
         }
         else {
-            console.log("We failed boss!");
+            // console.log("We failed boss!");
         }
-        console.log(`Current score is: ${currentScore}`);
+        // console.log(`Current score is: ${currentScore}`);
     }
     catch(e: unknown){
         if (e instanceof Error)
