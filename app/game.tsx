@@ -27,25 +27,36 @@ export function GameContent(){
     const startIndex = Math.max(0, currentRowIndex - 2);
     const endIndex = Math.min(rows.length, currentRowIndex + 3);
     const [visibleRows, setVisibleRows] = useState(rows.slice(startIndex,endIndex));
-
+    const [user,setUser] = useState<User | null>();
+    useEffect(() => {
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setUser(user);
+            console.log(user);
+        });
+        return () => unsubscribe();
+    }, []);
     useEffect(() => {
         async function getUser(){
-            const userData = await getUserData();
+            const userData = await getUserData(user!.uid);
             // setUserData(userData);
             return userData
         }
         getUser().then((result) => setUserData(result));
         
-    },[gameOver]);
+    },[user,gameOver]);
     useEffect(() => {
         async function fetchScores(){
-            await updateHighestScore(score);
+            await updateHighestScore(score,user!.uid);
             const scores = await getScoreBoard();
             // setScoresList(scores);
             return scores!
         }
-        fetchScores().then((result) => setScoresList(result));
-    },[gameOver])
+        fetchScores().then((result) => {
+            console.log(result);
+            setScoresList(result);
+            } 
+    )},[user,gameOver])
     useEffect(() => {
         prevRowIndexRef.current = currentRowIndex;
         const nextStartIndex = Math.max(0, currentRowIndex - 2);

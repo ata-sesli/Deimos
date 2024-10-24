@@ -24,35 +24,28 @@ export async function getScoreBoard(): Promise<Array<Score> | null>{
     }
     return null;
 }
-export async function getUserData(){
-    const auth = getAuth();
-    if (auth.currentUser !== null){
-        const userRef = auth.currentUser!.uid;
+export async function getUserData(uid: string){
+        const userRef = uid;
         const firestore = getFirestore();
         const db = collection(firestore,"users");
         const userDocRef = doc(db,userRef);
         const userDocRaw = await getDoc(userDocRef);
         const userData = userDocRaw.data();
         return userData;
-    }
-    else {
-        return null;
-    }
 }
-export async function updateHighestScore(currentScore: number){
+export async function updateHighestScore(currentScore: number,uid: string){
     try {
-        const auth = getAuth();
-        const userRef = auth.currentUser!.uid;
         const firestore = getFirestore();
         const db = collection(firestore,"users");
-        const userDocRef = doc(db,userRef);
+        const userDocRef = doc(db,uid);
         const userDocRaw = await getDoc(userDocRef);
         const userData = userDocRaw.data();
-        const highestScore = userData!.highestScore || 0;
-        if (userData!.highestScore > currentScore){
+        if (userData!.highestScore < currentScore){
             await updateDoc(userDocRef,{highestScore: currentScore});
         }
-        if (auth.currentUser === null) console.log("not signed in");
+        else {
+            console.log("We failed boss!");
+        }
         console.log(`Current score is: ${currentScore}`);
     }
     catch(e: unknown){

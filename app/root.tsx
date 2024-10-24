@@ -9,7 +9,8 @@ import type { LinksFunction } from "@remix-run/node";
 import { firestore, auth } from "./firebase/firebase.config";
 
 import "./tailwind.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },

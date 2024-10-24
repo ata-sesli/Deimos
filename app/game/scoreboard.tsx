@@ -44,5 +44,6 @@ export function Scoreboard({isOpen, onClose, scoresList} : ScoreboardProps){
             </div>
         </div>
     );
+    console.log("Scoreboard is rendered!");
     return scoreboard;
 }

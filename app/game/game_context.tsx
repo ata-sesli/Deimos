@@ -81,7 +81,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     const resetGame = async () => {
         setRows(Array.from({ length: 100 }, (_, index) => ({ id: index, isDone: false, correctCircle: _selectCorrectCircle(),usedLifeline: false })));
         setCurrentRowIndex(0);
-       // setScore(0);
+        setScore(0);
         setLifeline(3);
         setGameOver(false);
     };
