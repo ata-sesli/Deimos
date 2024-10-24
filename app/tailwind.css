@@ -34,7 +34,7 @@ body {
 
 @keyframes bottomToNone {
   from { transform: scale(0.75); opacity: 0.5; top: 30%}
-  to { transform: scale(0); opacity: 0; top: 0% }
+  to { transform: scale(0); opacity: 0; top: 5% }
 }
 
 /* Define classes for each animation */

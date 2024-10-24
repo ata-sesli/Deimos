@@ -1,20 +1,20 @@
-import React, { SetStateAction, useState } from 'react';
+import React, { SetStateAction, useState ,useContext} from 'react';
 import { register } from '~/firebase/auth';
-
+import { useGameContext } from '~/game/game_context';
 interface registerWindowProps {
     isOpen: boolean;
     setIsOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export function RegisterWindow({isOpen, setIsOpen} : registerWindowProps) {
-
+    const {score} = useGameContext();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleRegister = async () => {
         if (password.length > 5){
-            await register(username,email,password);
+            await register(username,email,password,score);
             setIsOpen(false);
         }
         else {

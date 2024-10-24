@@ -2,15 +2,22 @@ import { SetStateAction, useEffect, useState } from "react";
 import { useGameContext } from "./game_context";
 
 export function Circle({isCorrect = false,guessMade,setGuessMade,circleIndex,rowId}: {isCorrect: boolean,guessMade: boolean, setGuessMade:React.Dispatch<React.SetStateAction<boolean>>,circleIndex: number,rowId: number}){
-    const { guessedCircle, handleGuessMade} = useGameContext();
+    const { guessedCircle, handleGuessMade,usedLifeline,setUsedLifeline,rows} = useGameContext();
     const [bgColor,setBgColor] = useState('bg');
     const empty = " ";
+    const lifelinePurple = "bg-[#4B0082]"
     useEffect(() => {
         if (guessMade){
             const color = (isCorrect) ? 'bg-green-500' : 'bg-red-500';
             setBgColor(color);
         }
     },[guessMade,isCorrect])
+    useEffect(() => {
+        if (rows[rowId].usedLifeline){
+            const color = lifelinePurple;
+            setBgColor(color);
+        }
+    },[rows[rowId].usedLifeline])
     const handleClick = () => {
         if (!guessMade){
             setGuessMade(true);

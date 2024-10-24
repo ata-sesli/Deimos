@@ -4,7 +4,7 @@ import random from 'random';
 import {Row} from './game/row'
 import { GameProvider, useGameContext } from './game/game_context';
 import { Score, Scoreboard } from './game/scoreboard';
-import { getScoreBoard, getUserData } from './firebase/firestore';
+import { getScoreBoard, getUserData, updateHighestScore } from './firebase/firestore';
 import { RegisterWindow } from './login-register/register';
 import { LoginWindow } from './login-register/login';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
@@ -17,7 +17,7 @@ export function Game(){
     )
 }
 export function GameContent(){
-    const { rows, currentRowIndex, score, gameOver, resetGame , lifeline , handleLifeline, usingLifeline, } = useGameContext();
+    const { rows, currentRowIndex, score, gameOver, resetGame , lifeline , handleLifeline, usedLifeline, setUsedLifeline} = useGameContext();
     const prevRowIndexRef = useRef<number | null>(null);
     const [isLoginWindowOpen, setIsLoginWindowOpen] = useState(false);
     const [isRegisterWindowOpen, setIsRegisterWindowOpen] = useState(false);
@@ -31,16 +31,20 @@ export function GameContent(){
     useEffect(() => {
         async function getUser(){
             const userData = await getUserData();
-            setUserData(userData);
+            // setUserData(userData);
+            return userData
         }
-        getUser();
+        getUser().then((result) => setUserData(result));
+        
     },[gameOver]);
     useEffect(() => {
         async function fetchScores(){
+            await updateHighestScore(score);
             const scores = await getScoreBoard();
-            setScoresList(scores);
+            // setScoresList(scores);
+            return scores!
         }
-        fetchScores();
+        fetchScores().then((result) => setScoresList(result));
     },[gameOver])
     useEffect(() => {
         prevRowIndexRef.current = currentRowIndex;
@@ -105,9 +109,8 @@ export function GameContent(){
                     <button
                         className="mt-1 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline z-50"
                         onClick={() => {
-                
+                            setUsedLifeline(true);
                             handleLifeline();
-
                         }}
                     >
                         Use Lifeline

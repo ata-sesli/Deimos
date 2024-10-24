@@ -6,7 +6,7 @@ export async function login(email: string,password:string){
     const auth = getAuth();
     const response = await signInWithEmailAndPassword(auth,email,password);
 }
-export async function register(name: string, email: string, password: string){
+export async function register(name: string, email: string, password: string,currentScore: number){
     try {
         const auth = getAuth();
         const authResponse = await createUserWithEmailAndPassword(auth,email,password);
@@ -17,7 +17,7 @@ export async function register(name: string, email: string, password: string){
             id: authResponse.user.uid,
             name: name,
             email: email,
-            highestScore: "0"
+            highestScore: currentScore
         }
         await setDoc(userRef,userData);
     }
@@ -29,11 +29,4 @@ export async function register(name: string, email: string, password: string){
             alert("An error occured during registration. Try again");
         }
     }
-    const firestore = getFirestore();
-    const userData: Score = {
-        name: name,
-        highestScore: "0"
-    }
-    const db = collection(firestore,"users");
-    const docRef = await addDoc(db,userData);
 }
