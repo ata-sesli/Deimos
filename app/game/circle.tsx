@@ -2,7 +2,7 @@ import { SetStateAction, useEffect, useState } from "react";
 import { useGameContext } from "./game_context";
 
 export function Circle({isCorrect = false,guessMade,setGuessMade,circleIndex,rowId}: {isCorrect: boolean,guessMade: boolean, setGuessMade:React.Dispatch<React.SetStateAction<boolean>>,circleIndex: number,rowId: number}){
-    const { guessedCircle, handleGuessMade } = useGameContext();
+    const { guessedCircle, handleGuessMade} = useGameContext();
     const [bgColor,setBgColor] = useState('bg');
     const empty = " ";
     useEffect(() => {

@@ -17,7 +17,7 @@ export function Game(){
     )
 }
 export function GameContent(){
-    const { rows, currentRowIndex, score, gameOver, resetGame } = useGameContext();
+    const { rows, currentRowIndex, score, gameOver, resetGame , lifeline , handleLifeline, usingLifeline, } = useGameContext();
     const prevRowIndexRef = useRef<number | null>(null);
     const [isLoginWindowOpen, setIsLoginWindowOpen] = useState(false);
     const [isRegisterWindowOpen, setIsRegisterWindowOpen] = useState(false);
@@ -42,7 +42,6 @@ export function GameContent(){
         }
         fetchScores();
     },[gameOver])
-
     useEffect(() => {
         prevRowIndexRef.current = currentRowIndex;
         const nextStartIndex = Math.max(0, currentRowIndex - 2);
@@ -65,7 +64,7 @@ export function GameContent(){
         return 'hidden'; // Completely hidden
       };
     const gameContent = (
-        <div className='relative justify-content items-center overflow-hidden w-screen h-screen box-border sm:size-min'>
+        <div className='relative items-center overflow-hidden w-screen h-screen box-border sm:size-min'>
             {gameOver ? (
                 <div className='flex flex-col justify-center items-center h-screen'>
                     <h1 className='text-8xl mb-16'>Game Over</h1>
@@ -87,27 +86,50 @@ export function GameContent(){
                 }
                 </div>
             ) : (
-                <>
-                    <div className="relative left-1/2 top-[1%] transform -translate-x-1/2 min-w-fit min-h-fit text-2xl">Score: {score}</div>
-                    <button className="absolute top-[1%] right-4 transform -translate-x-1/2 min-w-fit min-h-fit text-2xl z-50"
-                            onClick={() => setIsScoreboardOpen(true)}> Scoreboard </button>
-                    <div className='relative flex xs:right-12 lg:right-0 flex-col items-center justify-content w-screen h-screen bottom-24'>
-                        <TransitionGroup>
-                            {visibleRows.map((row, index) => (
-                                <CSSTransition
-                                    key={row.id}
-                                    timeout={1500}
-                                    classNames="fade"
-                                >
-                                    <div className={`${getRowClass(startIndex + index)} center-row xl:space-y-16 lg:space-y-12 md:space-y-8 sm:space-y-4 xs:space-x-4`}>
-                                        {row.id + 1}
-                                        <Row rowId={row.id} />
-                                    </div>
-                                </CSSTransition>
-                            ))}
-                        </TransitionGroup>
+                <div className='mr-8'> 
+                    <div className='flex flex-col items-center w-full p-4 bg-gray-800 text-white flex-shrink'>
+                    <div className='flex flex-row justify-around items-center w-screen p-4 max-w-4xl'>
+                        <div className="lg:text-2xl xs:text-lg">
+                            Score: {score}
+                        </div>
+                        <div className="lg:text-2xl xs:text-lg">
+                            Lifelines: {lifeline}
+                        </div>
+                        <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline z-50"
+                            onClick={() => setIsScoreboardOpen(true)}
+                        >
+                            Scoreboard
+                        </button>
                     </div>
-                </>
+                    <button
+                        className="mt-1 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline z-50"
+                        onClick={() => {
+                
+                            handleLifeline();
+
+                        }}
+                    >
+                        Use Lifeline
+                    </button>
+                </div>
+                        <div className='relative flex xs:right-12 lg:right-0 flex-col items-center justify-content w-screen h-screen bottom-24'>
+                            <TransitionGroup>
+                                {visibleRows.map((row, index) => (
+                                    <CSSTransition
+                                        key={row.id}
+                                        timeout={1500}
+                                        classNames="fade"
+                                    >
+                                        <div className={`${getRowClass(startIndex + index)} center-row xl:space-y-16 lg:space-y-12 md:space-y-8 sm:space-y-4 xs:space-x-4`}>
+                                            {row.id + 1}
+                                            <Row rowId={row.id} />
+                                        </div>
+                                    </CSSTransition>
+                                ))}
+                            </TransitionGroup>
+                        </div>
+                </div>
             )}
             <Scoreboard
                   isOpen={isScoreboardOpen}

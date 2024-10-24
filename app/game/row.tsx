@@ -6,12 +6,8 @@ export function Row({rowId} : {rowId: number}){
     const { rows, handleGuessMade , guessedCircle} = useGameContext();
     const row = rows.find(row => row.id === rowId);
     const [guessMade,setGuessMade] = useState(false);
-
-    useEffect(() => {
-        if (guessMade){
-            // handleGuessMade(rowId,guessedCircle!);
-        }
-    },[guessMade])
+    const [usedLifeline,setUsedLifeline] = useState(false);
+    const lifelinePurple = "#4B0082"
 
     if (!row) return null;
 
